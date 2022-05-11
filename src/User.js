@@ -15,22 +15,13 @@ export const User = ({ users = [] }) => {
 
   const userouteMatch = useRouteMatch();
   const { path, url } = userouteMatch;
-  // console.log(path, url);
-  //>> path, /users/:userId
-  //>> url, /users/1
+
   if (!userId) {
     throw new Error("No URL parameter for userId");
   }
 
-  //find and return the user from the DB if there is a match
   const user = users.find((user) => `${user.id}` === userId);
 
-  //If `user` exists:
-  //render a Link to return home
-  //render a NavLink/Link
-
-  //The UserProfile Route will render `UserProfile` component to contain the info of user.
-  //The UserPosts Route will render `UserPosts` component to contain the posts of user.
   if (user) {
     return (
       <section>
