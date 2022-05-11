@@ -13,12 +13,21 @@ import UserProfile from "./UserProfile";
 export const User = ({ users = [] }) => {
   const { userId } = useParams();
 
+  const userouteMatch = useRouteMatch();
+  const { path, url } = userouteMatch;
+  console.log(path, url); 
+  //>> path, /users/:userId
+  //>> url, /users/1
   if (!userId) {
     throw new Error("No URL parameter for userId");
   }
 
+  //find and return the user from the DB if there is a match
   const user = users.find((user) => `${user.id}` === userId);
 
+  //If there is:
+  //render a Link to return home
+  //render a NavLink/Link
   if (user) {
     return (
       <section>
@@ -27,18 +36,24 @@ export const User = ({ users = [] }) => {
           <h2>{user.name}</h2>
           <ul>
             <li>
-              <NavLink to={`#`} data-testid="user-profile">
+              <NavLink to={url} data-testid="user-profile">
                 Profile
               </NavLink>
             </li>
             <li>
-              <NavLink to={`#`} data-testid="user-posts">
+              <NavLink to={`${url}/posts`} data-testid="user-posts">
                 Posts
               </NavLink>
             </li>
           </ul>
-          <UserProfile user={user} />
-          <UserPosts posts={user.posts} />
+          <Switch>
+            <Route exact path={path}>
+              <UserProfile user={user} />
+            </Route>
+            <Route path={`${path}/posts`}>
+              <UserPosts posts={user.posts} />
+            </Route>
+          </Switch>
         </div>
       </section>
     );
